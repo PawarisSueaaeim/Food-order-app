@@ -7,8 +7,6 @@ const defaultCartState = {
 };
 
 const cartReducer = (state, action) => {
-    console.log(action.type)
-    console.log(action.item.id)
     if (action.type === 'ADD') {
         const updateTotalAmount = state.totalAmount + action.item.price * action.item.amount
         const existingCartItemIndex = state.items.findIndex((item) => item.id === action.item.id)
@@ -33,25 +31,25 @@ const cartReducer = (state, action) => {
         }
     }
 
-    // if (action.type === 'REMOVE') {
-    //     const existingCartItemIndex = state.items.findIndex((item) => item.id === action.item.id)
-        // const existingCartItem = state.items[existingCartItemIndex];
-        // const updateTotalAmount = state.totalAmount - existingCartItem.price
+    if (action.type === 'REMOVE') {
+        const existingCartItemIndex = state.items.findIndex((item) => item.id === action.id)
+        const existingCartItem = state.items[existingCartItemIndex];
+        const updateTotalAmount = state.totalAmount - existingCartItem.price
 
-        // let updateCartItems;
+        let updateCartItems;
 
-        // if(existingCartItem.amount === 1) {
-        //     updateCartItems = state.items.filter((item) => item.id !== action.id)
-        // }else{
-        //     const updateCartItem = { ...existingCartItem, amount: existingCartItem.amount - 1}
-        //     updateCartItems = [...state.items]
-        //     updateCartItems[existingCartItemIndex] = updateCartItem
-        // }
-        // return {
-        //     items: updateCartItems,
-        //     totalAmount: updateTotalAmount
-        // }
-    // }
+        if(existingCartItem.amount === 1) {
+            updateCartItems = state.items.filter((item) => item.id !== action.id)
+        }else{
+            const updateCartItem = { ...existingCartItem, amount: existingCartItem.amount - 1}
+            updateCartItems = [...state.items]
+            updateCartItems[existingCartItemIndex] = updateCartItem
+        }
+        return {
+            items: updateCartItems,
+            totalAmount: updateTotalAmount
+        }
+    }
     
     return defaultCartState
 }
